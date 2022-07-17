@@ -16,6 +16,8 @@ class SudokuGenerator():
                             this determines K, the number of elements removed from the grid. 
     """
 
+    # Puzzle difficulty is determined by the number of cells removed from the puzzle. 
+    # Currently supports three different difficulty levels. 
     _DIFFICULTY_MAPPING = {
         'easy': 10,
         'medium': 30,
@@ -41,10 +43,8 @@ class SudokuGenerator():
         return random.sample(s, len(s)) 
 
     def generate_board(self):
-        """
-        Start by generating a random filled-in game-board following Sudoku rules.
-        Adapted from the following: https://stackoverflow.com/questions/45471152/how-to-create-a-sudoku-puzzle-in-python
-        """
+        """ Start by generating a random filled-in game-board following Sudoku rules.
+        Adapted from the following: https://stackoverflow.com/questions/45471152/how-to-create-a-sudoku-puzzle-in-python """
         # Randomize rows, columns and numbers (of valid base pattern)
         rows  = [ g * self.rank + r for g in self.shuffle(range(self.rank) ) for r in self.shuffle(range(self.rank) ) ] 
         cols  = [ g * self.rank + c for g in self.shuffle(range(self.rank) ) for c in self.shuffle(range(self.rank) ) ]
@@ -53,8 +53,7 @@ class SudokuGenerator():
         # Produce board using randomized baseline pattern
         self.board = [ [nums[ self.pattern(r, c) ] for c in cols ] for r in rows ]
         
-        """ After a valid, filled-in game-board has been generated, remove K cells from the game-board to create 
-        the puzzle. You should keep at least 17 valid cells for a game to be solvable. """
+        """ After a valid, filled-in game-board has been generated, remove K cells from the game-board to create the puzzle. """
         K = 0
         while(K < self.K):
             removed = self._remove_cell()
@@ -75,7 +74,12 @@ class SudokuGenerator():
         raise NotImplementedError("Not yet implemented")
 
     def display_board(self):
-        """ Display Sudoku board """
+        """ Display Sudoku board. """
         for i in range(0, len(self.board)):
             print(*self.board[i])
+
+
+class KillerSudokuGenerator(SudokuGenerator):
+    def __init__(self):
+        pass
 
