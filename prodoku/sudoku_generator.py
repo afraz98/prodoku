@@ -2,13 +2,21 @@ import random
 
 class SudokuGenerator():
     """
-    Difficulty mappings:
-        1) Easy (K = 20)
-        2) Medium (K = 30)
-        3) Hard (K = 40)
+    This class generates Sudoku boards of a given rank and difficulty.
+    A Sudoku board is represented by an n^2 x n^2 grid where n is the rank of the board. 
+    This means a typical 9x9 Sudoku grid would have rank n = 3.
+
+    The easiest method to generate a Sudoku board would be to first a 'solved' 9x9 Sudoku grid
+    and remove K elements from this grid. 
+
+    Attributes:
+        rank (int): The rank of the Sudoku board to be generated. For an n^2 x n^2 board, its rank would be n.
+        debug (bool): Debug flag
+        difficulty (str): String representing the 'difficulty' of the puzzle to be generated. 
+                            this determines K, the number of elements removed from the grid. 
     """
 
-    _difficulty_mapping = {
+    _DIFFICULTY_MAPPING = {
         'easy': 10,
         'medium': 30,
         'hard': 50
@@ -16,18 +24,18 @@ class SudokuGenerator():
 
     _version = "0.0.1"
     
-    def __init__(self, base=3, difficulty='easy', debug=True):
+    def __init__(self, rank=3, difficulty='easy', debug=True):
         self.debug = debug
-        self.base = base   
-        self.side = self.base * self.base
+        self.rank = rank   
+        self.side = self.rank * self.rank
 
         self.difficulty = difficulty
-        self.K = self._difficulty_mapping[self.difficulty]
+        self.K = self._DIFFICULTY_MAPPING[self.difficulty]
         pass
 
-    # pattern for a baseline valid solution
+    # Pattern for a baseline valid solution
     def pattern(self, r,c): 
-        return (self.base * (r % self.base)+ r // self.base + c) % self.side
+        return (self.rank * (r % self.rank)+ r // self.rank + c) % self.side
 
     def shuffle(self, s): 
         return random.sample(s, len(s)) 
@@ -38,9 +46,9 @@ class SudokuGenerator():
         Adapted from the following: https://stackoverflow.com/questions/45471152/how-to-create-a-sudoku-puzzle-in-python
         """
         # Randomize rows, columns and numbers (of valid base pattern)
-        rows  = [ g * self.base + r for g in self.shuffle(range(self.base) ) for r in self.shuffle(range(self.base) ) ] 
-        cols  = [ g * self.base + c for g in self.shuffle(range(self.base) ) for c in self.shuffle(range(self.base) ) ]
-        nums  = self.shuffle(range(1, self.base * self.base +1))
+        rows  = [ g * self.rank + r for g in self.shuffle(range(self.rank) ) for r in self.shuffle(range(self.rank) ) ] 
+        cols  = [ g * self.rank + c for g in self.shuffle(range(self.rank) ) for c in self.shuffle(range(self.rank) ) ]
+        nums  = self.shuffle(range(1, self.rank * self.rank +1))
 
         # Produce board using randomized baseline pattern
         self.board = [ [nums[ self.pattern(r, c) ] for c in cols ] for r in rows ]
@@ -70,7 +78,4 @@ class SudokuGenerator():
         """ Display Sudoku board """
         for i in range(0, len(self.board)):
             print(*self.board[i])
-        print()
-
-
 

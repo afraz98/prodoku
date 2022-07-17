@@ -1,9 +1,9 @@
 from sudoku_generator import SudokuGenerator
 
-generator = SudokuGenerator()
-generator.generate_board()
-generator.display_board()
+generator1 = SudokuGenerator(rank=3)
+generator1.generate_board()
+generator1.display_board()
 
-
-# print(generator._get_cell(0,1))
-# print(generator._get_cell(1,1))
+generator2 = SudokuGenerator(rank=2)
+generator2.generate_board()
+generator2.display_board()
