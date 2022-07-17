@@ -1,85 +1,74 @@
 import random
 
 class SudokuGenerator():
-    _version = "0.0.0"
-    
-    def __init__(self, grid_size=9, difficulty='easy', debug=False):
-        self.debug = debug
-        self.grid_size = grid_size    
-        self.difficulty = difficulty
+    """
+    Difficulty mappings:
+        1) Easy (K = 20)
+        2) Medium (K = 30)
+        3) Hard (K = 40)
+    """
 
-        # Generate default game board
-        self.board = [[0 for i in range(self.grid_size)] for i in range(self.grid_size)]
+    _difficulty_mapping = {
+        'easy': 10,
+        'medium': 30,
+        'hard': 50
+    }
+
+    _version = "0.0.1"
+    
+    def __init__(self, base=3, difficulty='easy', debug=True):
+        self.debug = debug
+        self.base = base   
+        self.side = self.base * self.base
+
+        self.difficulty = difficulty
+        self.K = self._difficulty_mapping[self.difficulty]
         pass
+
+    # pattern for a baseline valid solution
+    def pattern(self, r,c): 
+        return (self.base * (r % self.base)+ r // self.base + c) % self.side
+
+    def shuffle(self, s): 
+        return random.sample(s, len(s)) 
 
     def generate_board(self):
         """
-        Naive solution: 
-
-        Generate cells at random. Before placing cells, verify that their placement 
-        is correct. 
+        Start by generating a random filled-in game-board following Sudoku rules.
+        Adapted from the following: https://stackoverflow.com/questions/45471152/how-to-create-a-sudoku-puzzle-in-python
         """
+        # Randomize rows, columns and numbers (of valid base pattern)
+        rows  = [ g * self.base + r for g in self.shuffle(range(self.base) ) for r in self.shuffle(range(self.base) ) ] 
+        cols  = [ g * self.base + c for g in self.shuffle(range(self.base) ) for c in self.shuffle(range(self.base) ) ]
+        nums  = self.shuffle(range(1, self.base * self.base +1))
 
-        # Generate values for all random tiles
+        # Produce board using randomized baseline pattern
+        self.board = [ [nums[ self.pattern(r, c) ] for c in cols ] for r in rows ]
         
-        for i in range(0, self.grid_size):
-            for j in range(0, self.grid_size):
-                valid_cell_values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-                value = random.choice(valid_cell_values)
-                if self.debug:
-                    print("Possible value: %d" % value)
-                while not (self._check_row(i, value) and self._check_column(j, value) and self._check_nonet(i, j, value)):
-                    value = random.choice(valid_cell_values)
-                    if self.debug:
-                        print("Possible value: %d" % value)
-                
-                self.board[i][j] = value
-                valid_cell_values.remove(value)
-                self.display_board()
-            assert(sum(self.board[i]) == 45)
-        
-        # Remove K cells from the game board.
+        """ After a valid, filled-in game-board has been generated, remove K cells from the game-board to create 
+        the puzzle. You should keep at least 17 valid cells for a game to be solvable. """
+        K = 0
+        while(K < self.K):
+            removed = self._remove_cell()
+            if removed:
+                K += 1
         pass
     
-    def _check_row(self, row_index, value):
-        """ Check the provided row to see if the generated value is unused. """
-        if self.debug:
-            print("Checking row ... %s" % str(self.board[row_index].count(value) == 0))
-        return (self.board[row_index].count(value) == 0)
-
-    def _check_column(self, column_index, value):
-        """ Check the provided column to see if the generated value is unused. """
-        count = 0
-        for i in range(0, self.grid_size):
-            if self.board[i][column_index] == value:
-                count += 1
-
-        if self.debug:
-            print("Checking column ... %s" % (str(count==0)))
-        return (count == 0)
-    
-    def _check_nonet(self, row_index, column_index, value):
-        """ Check the provided nonet to see if the generated value is unused. """
-        nonet_start_row = int(row_index / 3)
-        nonet_start_column = int(column_index / 3)
-
-        if self.debug:
-            print("start_row: %d start_column: %d" % (nonet_start_row, nonet_start_column))
-        for i in range((3 * nonet_start_row), (3 * nonet_start_row) + 3):
-            for j in range(3 * nonet_start_column, (3 * nonet_start_column) + 3):
-                if self.debug:
-                    print("(%d,%d) = %d == %d? %s" % (i, j, self.board[i][j], value, str(self.board[i][j] == value)))
-                if self.board[i][j] == value:       
-                    return False
+    def _remove_cell(self):
+        i = random.randint(0, self.side - 1)
+        j = random.randint(0, self.side - 1)
+        if self.board[i][j] == 0:
+            return False
+        self.board[i][j] = 0
         return True
-
 
     def _is_solvable(self):
-        return True
+        """ Check if the given Sudoku puzzle generated is solvable. """
+        raise NotImplementedError("Not yet implemented")
 
     def display_board(self):
-        for i in range(0, self.grid_size):
+        """ Display Sudoku board """
+        for i in range(0, len(self.board)):
             print(*self.board[i])
         print()
 
