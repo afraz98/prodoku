@@ -75,6 +75,8 @@ Output:
 
 ## Installation
 
+Navigate to the directory containing the `setup.py` file and run the following command:
+
 ``` sudo python3 setup.py install ```
 
 
