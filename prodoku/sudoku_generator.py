@@ -20,8 +20,7 @@ class SudokuGenerator():
     # Currently supports three different difficulty levels. 
     _DIFFICULTY_MAPPING = {
         'easy': 10,
-        'medium': 30,
-        'hard': 50
+        'hard': 30
     }
 
     _version = "0.0.1"
@@ -72,6 +71,9 @@ class SudokuGenerator():
     def _is_solvable(self):
         """ Check if the given Sudoku puzzle generated is solvable. """
         raise NotImplementedError("Not yet implemented")
+
+    def get_board(self):
+        return self.board
 
     def display_board(self):
         """ Display Sudoku board. """
