@@ -18,8 +18,6 @@ Sudoku is a puzzle game that provides the player with a 9x9 grid containing numb
 
 2) SudokuSolver
 
-3) SudokuValidator
-
 ## Usage
 
 ```

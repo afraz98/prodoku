@@ -8,7 +8,7 @@ generator.generate_board()
 generator.display_board()
 print()
 
-generator2 = SudokuGenerator(rank=3, difficulty='medium')
+generator2 = SudokuGenerator(rank=3, difficulty='hard')
 generator2.generate_board()
 generator2.display_board()
 print()
