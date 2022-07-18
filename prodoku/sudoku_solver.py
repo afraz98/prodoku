@@ -21,9 +21,9 @@ class SudokuSolver():
     def solve(self):
         if self.debug:
             self.display_board()
-
+        
+        iterations = 1
         while not self._check_board():
-            iterations = 1
 
             # Start with naive approach -- look at each cell on the game board and determine which 
             # values may be placed in them. If any cells have trivial entries, enter them. 
@@ -35,12 +35,17 @@ class SudokuSolver():
             for i in range(0, self.grid_size):
                 for j in range(0, self.grid_size):
                     if len(self.analysis_board[i][j]) == 1:
+                        if self.debug:
+                            print("(%d, %d) = %d" % (i, j, self.analysis_board[i][j][0]))
                         self.board[i][j] = self.analysis_board[i][j][0]
                         self.analysis_board[i][j] = []
 
             if self.debug:
                 print("Iteration %d" % iterations)
                 self.display_board()
+                input()
+
+            iterations += 1
         
         if self.debug:
             print("Solution")

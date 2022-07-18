@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, "..")
+
 from sudoku_solver import SudokuSolver
 
 test_board = [
@@ -10,6 +13,21 @@ test_board = [
     [8, 5, 0, 1, 6, 4, 3, 9, 7],
     [9, 3, 7, 5, 0, 8, 1, 4, 6],
     [4, 1, 6, 3, 0, 9, 5, 8, 2],
+]
+
+solver = SudokuSolver(test_board)
+solver.solve()
+
+test_board = [
+    [0, 0, 8, 1, 0, 7, 2, 0, 4],
+    [9, 0, 0, 0, 5, 8, 6, 1, 0],
+    [1, 6, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 3, 0, 0, 1, 8, 2, 9],
+    [6, 4, 0, 2, 8, 9, 7, 0, 3],
+    [2, 8, 0, 5, 7, 0, 4, 6, 1],
+    [7, 1, 0, 0, 0, 6, 3, 8, 2],
+    [0, 0, 6, 8, 3, 0, 1, 7, 5],
+    [8, 3, 0, 7, 1, 5, 9, 4, 6],
 ]
 
 solver = SudokuSolver(test_board)
