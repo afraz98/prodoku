@@ -1,5 +1,20 @@
 class SudokuSolver():
-    _version = "0.0.0"
+    """
+    This class solves Sudoku boards of a given rank and difficulty.
+    A Sudoku board is represented by an n^2 x n^2 grid where n is the rank of the board. 
+    This means a typical 9x9 Sudoku grid would have rank n = 3.
+
+    The easiest method to generate a Sudoku board would be to first a 'solved' 9x9 Sudoku grid
+    and remove K elements from this grid. 
+
+    Attributes:
+        rank (int): The rank of the Sudoku board to be generated. For an n^2 x n^2 board, its rank would be n.
+        debug (bool): Debug flag
+        board (list): List representation of the n^2 x n^2 game board to be solved. 
+        analysis_board (list): n^2 x n^2 list storing all possible values that may
+                                be entered into a given cell. 
+    """
+    _version = "0.0.1"
     
     def __init__(self, board, rank=3, debug=True):
         self.board = board
@@ -7,18 +22,26 @@ class SudokuSolver():
         self.grid_size = self.rank * self.rank
         self.debug = debug
 
-        # Create a representation of the game board with a list of possible values 
-        # mapped to each game board cell. 
+        # Create a representation of the game board with a list of possible values mapped to each game board cell. 
         self.analysis_board = [ [[1,2,3,4,5,6,7,8,9] for i in range(self.grid_size)] for i in range(self.grid_size)]
         pass
 
     def display_board(self):
+        """ Display the game board. """
         for i in range(0, self.grid_size):
             print(*self.board[i])    
         print() 
         pass
 
     def solve(self):
+        """
+        Attempt to solve the provided Sudoku puzzle. Looks at each cell on the game board and determine which 
+        values may be placed in them. If any cells have trivial entries (where only one value can be entered), enter them.
+
+        Returns:
+            (int): Number of iterations through the naive algorithm 
+                    required to find the given solution. 
+        """
         if self.debug:
             self.display_board()
         
@@ -51,7 +74,7 @@ class SudokuSolver():
             print("Solution")
             self.display_board()
         
-        pass
+        return iterations
 
     def _analyze_cell(self, row_index, column_index):
         """
@@ -157,4 +180,9 @@ class SudokuSolver():
                 result &= self._check_nonet_accuracy(i, j) 
         
         return result
+
+class KillerSudokuSolver(SudokuSolver):
+    _version = "0.0.0"
+    def __init__(self, board, rank=3, debug=True):
+        pass
 

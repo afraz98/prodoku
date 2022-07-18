@@ -81,6 +81,7 @@ class SudokuGenerator():
 
 
 class KillerSudokuGenerator(SudokuGenerator):
-    def __init__(self):
+    _version = "0.0.0"
+    def __init__(self, rank=3, difficulty='easy', debug=True):
         pass
 
