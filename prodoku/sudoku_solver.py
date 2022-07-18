@@ -83,7 +83,7 @@ class SudokuSolver():
         Returns:
             (bool): Flag indicated that value IS within the row.
         """
-        return self.board[row_index].count(value) != 0
+        return value in self.board[row_index]
 
     def _check_column_for_value(self, column_index, value):
         """
@@ -95,11 +95,7 @@ class SudokuSolver():
         Returns:
             (bool): Flag indicated that value IS within the column.
         """
-        count = 0
-        for i in range(0, self.grid_size):
-            if self.board[i][column_index] == value:
-                count += 1
-        return count != 0
+        return value in [ self.board[i][column_index] for i in range(0, self.grid_size) ]
 
     def _check_nonet_for_value(self, row_index, column_index, value):
         """
@@ -112,8 +108,8 @@ class SudokuSolver():
         Returns:
             (bool): Flag indicated that value IS within the nonet.
         """
-        nonet_start_row = int(row_index/3)
-        nonet_start_column = int(column_index/3)
+        nonet_start_row = row_index // 3
+        nonet_start_column = column_index // 3
 
         for i in range((3 * nonet_start_row), (3 * nonet_start_row) + 3):
             for j in range(3 * nonet_start_column, (3 * nonet_start_column) + 3):

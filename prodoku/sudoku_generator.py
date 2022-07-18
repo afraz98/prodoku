@@ -15,15 +15,13 @@ class SudokuGenerator():
         difficulty (str): String representing the 'difficulty' of the puzzle to be generated. 
                             this determines K, the number of elements removed from the grid. 
     """
+    _version = "0.0.1"
+
 
     # Puzzle difficulty is determined by the number of cells removed from the puzzle. 
     # Currently supports three different difficulty levels. 
-    _DIFFICULTY_MAPPING = {
-        'easy': 10,
-        'hard': 30
-    }
+    _DIFFICULTY_MAPPING = { 'easy': 10, 'hard': 30 }
 
-    _version = "0.0.1"
     
     def __init__(self, rank=3, difficulty='easy', debug=True):
         self.debug = debug
@@ -36,7 +34,7 @@ class SudokuGenerator():
 
     # Pattern for a baseline valid solution
     def pattern(self, r,c): 
-        return (self.rank * (r % self.rank)+ r // self.rank + c) % self.side
+        return (self.rank * (r % self.rank) + r // self.rank + c) % self.side
 
     def shuffle(self, s): 
         return random.sample(s, len(s)) 
@@ -55,12 +53,13 @@ class SudokuGenerator():
         """ After a valid, filled-in game-board has been generated, remove K cells from the game-board to create the puzzle. """
         K = 0
         while(K < self.K):
-            removed = self._remove_cell()
+            removed = self._remove_random_cell()
             if removed:
                 K += 1
         pass
     
-    def _remove_cell(self):
+    def _remove_random_cell(self):
+        """ Remove random cell from the game board. """
         i = random.randint(0, self.side - 1)
         j = random.randint(0, self.side - 1)
         if self.board[i][j] == 0:
